@@ -5,17 +5,24 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "Characters/PlayerCharacter.h"
+#include "Debug/Debuggers.h"
+#include "Enums/PlayerStates.h"
 
 
 AMainPlayerController::AMainPlayerController()
 {
 	// If there is multiplayer/other clients, replicates changes across all users
 	bReplicates = true;
+
+	bSprintToggled = false;
 }
 
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MainPlayerRef = Cast<APlayerCharacter>(GetCharacter());
 
 	// Checks if the Player's initial context is set and not a nullptr
 	check(PlayerContext);
@@ -34,6 +41,8 @@ void AMainPlayerController::SetupInputComponent()
 
 	/* Input Action Bindings */
 	EnhancedInputComponent->BindAction(PlayerMovementAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
+	EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Started, this, &AMainPlayerController::ToggleSprint);
+	//EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Completed, this, &AMainPlayerController::SprintOff);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -50,5 +59,24 @@ void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
 	}
+}
 
+void AMainPlayerController::ToggleSprint()
+{
+	if (!MainPlayerRef) return;
+
+	float CurrentSpeed = MainPlayerRef->GetVelocity().Size2D();
+	
+	if (CurrentSpeed >= 300.f)
+	{
+		if (MainPlayerRef->MovementState == ECharacterState::ECS_Moving)
+		{
+			MainPlayerRef->StartSprinting();
+		}
+		else if (MainPlayerRef->MovementState == ECharacterState::ECS_Sprinting)
+		{
+			MainPlayerRef->StopSprinting();
+		}
+	}
+	
 }

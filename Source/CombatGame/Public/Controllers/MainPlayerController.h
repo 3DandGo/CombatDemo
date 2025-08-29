@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UInputAction;
+class APlayerCharacter;
 struct FInputActionValue;
 
 /**
@@ -22,6 +23,11 @@ public:
 
 	AMainPlayerController();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	bool bSprintToggled;
+
+	APlayerCharacter* MainPlayerRef;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -35,5 +41,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> PlayerMovementAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> PlayerSprintAction;
+
 	void Move(const FInputActionValue& InputActionValue);
+	void ToggleSprint();
 };
