@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
+#include "Debug/Debuggers.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -26,7 +27,11 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnStartOverlap);
+	OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AWeaponBase::OnEndOverlap);
 }
+
+
 
 // Called every frame
 void AWeaponBase::Tick(float DeltaTime)
@@ -39,5 +44,24 @@ void AWeaponBase::Tick(float DeltaTime)
 void AWeaponBase::Interact()
 {
 
+}
+
+void AWeaponBase::OnStartOverlap(UPrimitiveComponent* OverlappedComponent, 
+	AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex, 
+	bool bFromSweep, 
+	const FHitResult& SweepResult)
+{
+	DEBUG_MESSAGE(FColor::Green, TEXT("Overlapped with something"));
+	
+}
+
+void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, 
+	AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex)
+{
+	DEBUG_MESSAGE(FColor::Red, TEXT("Finished Overlapping with something"));
 }
 
