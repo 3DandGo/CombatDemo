@@ -44,6 +44,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> PlayerSprintAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> PlayerInteractAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void ToggleSprint();
+	void Interaction();
 };

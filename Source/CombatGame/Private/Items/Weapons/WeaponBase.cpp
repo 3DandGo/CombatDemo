@@ -53,6 +53,7 @@ void AWeaponBase::OnStartOverlap(UPrimitiveComponent* OverlappedComponent,
 	bool bFromSweep, 
 	const FHitResult& SweepResult)
 {
+	FString HitPlayer = SweepResult.GetActor()->GetName();
 	DEBUG_MESSAGE(FColor::Green, TEXT("Overlapped with something"));
 	
 }

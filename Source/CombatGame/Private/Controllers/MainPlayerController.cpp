@@ -42,7 +42,7 @@ void AMainPlayerController::SetupInputComponent()
 	/* Input Action Bindings */
 	EnhancedInputComponent->BindAction(PlayerMovementAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
 	EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Started, this, &AMainPlayerController::ToggleSprint);
-	//EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Completed, this, &AMainPlayerController::SprintOff);
+	EnhancedInputComponent->BindAction(PlayerInteractAction, ETriggerEvent::Started, this, &AMainPlayerController::Interaction);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -79,4 +79,9 @@ void AMainPlayerController::ToggleSprint()
 		}
 	}
 	
+}
+
+void AMainPlayerController::Interaction()
+{
+	DEBUG_MESSAGE(FColor::Green, TEXT("Interaction Button Pressed"));
 }
