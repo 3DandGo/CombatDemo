@@ -38,6 +38,17 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	WeaponSpin(DeltaTime);
+
+	RunningTime += DeltaTime;
+	FVector NewLocation = GetActorLocation();
+	NewLocation.Z += FMath::Sin(RunningTime * FloatSpeed) * FloatAmplitude * DeltaTime;
+	SetActorLocation(NewLocation);
+}
+
+void AWeaponBase::WeaponSpin(float DeltaTime)
+{
+	AddActorLocalRotation(FRotator(SpinSpeed * DeltaTime, 0.f, 0.f));
 }
 
 // Interaction Interface Function
@@ -65,4 +76,3 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	DEBUG_MESSAGE(FColor::Red, TEXT("Finished Overlapping with something"));
 }
-

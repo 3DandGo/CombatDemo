@@ -15,10 +15,12 @@ UCLASS()
 class COMBATGAME_API AWeaponBase : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	AWeaponBase();
 	virtual void Tick(float DeltaTime) override;
+
+	void WeaponSpin(float DeltaTime);
 
 	virtual void Interact() override;
 
@@ -40,7 +42,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* WeaponHitBox;
 
-private:	
-	
+private:
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float SpinSpeed = 45.f;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float FloatAmplitude = 20.f;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float FloatSpeed = 2.0f;
+
+	float RunningTime = 0.0f;
 };
