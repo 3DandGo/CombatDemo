@@ -83,3 +83,9 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 		Player->SetOverlappingWeapon(nullptr);
 	}
 }
+
+void AttachWeaponToSocket(USceneComponent* InParent, const FName& InSocketName)
+{
+	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
+	
+}

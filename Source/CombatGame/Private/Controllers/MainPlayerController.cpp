@@ -9,6 +9,7 @@
 #include "Debug/Debuggers.h"
 #include "Enums/PlayerStates.h"
 #include "Items/Weapons/WeaponBase.h"
+#include "Interfaces/InteractionInterface.h"
 
 
 AMainPlayerController::AMainPlayerController()
@@ -85,4 +86,9 @@ void AMainPlayerController::ToggleSprint()
 void AMainPlayerController::Interaction()
 {
 	DEBUG_MESSAGE(FColor::Green, TEXT("Interaction Button Pressed"));
+
+	if (MainPlayerRef)
+	{
+		MainPlayerRef->OverlappingWeapon->
+	}
 }
