@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
+#include "Characters/PlayerCharacter.h"
 #include "Debug/Debuggers.h"
 
 AWeaponBase::AWeaponBase()
@@ -64,9 +65,11 @@ void AWeaponBase::OnStartOverlap(UPrimitiveComponent* OverlappedComponent,
 	bool bFromSweep, 
 	const FHitResult& SweepResult)
 {
-	FString HitPlayer = SweepResult.GetActor()->GetName();
-	DEBUG_MESSAGE(FColor::Green, TEXT("Overlapped with something"));
-	
+	Player = Cast<APlayerCharacter>(OtherActor);
+	if (OtherActor == Player)
+	{
+		Player->SetOverlappingWeapon(this);
+	}
 }
 
 void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, 
@@ -74,5 +77,9 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	UPrimitiveComponent* OtherComp, 
 	int32 OtherBodyIndex)
 {
-	DEBUG_MESSAGE(FColor::Red, TEXT("Finished Overlapping with something"));
+	Player = Cast<APlayerCharacter>(OtherActor);
+	if (OtherActor == Player)
+	{
+		Player->SetOverlappingWeapon(nullptr);
+	}
 }

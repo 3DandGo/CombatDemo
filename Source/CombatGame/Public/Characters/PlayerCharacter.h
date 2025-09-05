@@ -12,6 +12,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class AMainPlayerController;
 class UCharacterMovementComponent;
+class AWeaponBase;
 
 UCLASS()
 class COMBATGAME_API APlayerCharacter : public ACharacter
@@ -40,6 +41,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 900.f;
 
+	UPROPERTY(VisibleInstanceOnly)
+	AWeaponBase* OverlappingWeapon;
+
+	UPROPERTY(VisibleAnywhere)
+	AWeaponBase* EquippedWeapon;
+
 	void StartSprinting();
 	void StopSprinting();
 
@@ -65,4 +72,7 @@ private:
 			GetCharacterMovement()->MaxWalkSpeed = NewSpeed;
 		}
 	}
+
+public:
+	FORCEINLINE void SetOverlappingWeapon(AWeaponBase* Weapon) { OverlappingWeapon = Weapon; }
 };

@@ -10,6 +10,7 @@
 class USphereComponent;
 class UStaticMeshComponent;
 class UBoxComponent;
+class APlayerCharacter;
 
 UCLASS()
 class COMBATGAME_API AWeaponBase : public AActor, public IInteractionInterface
@@ -41,6 +42,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* WeaponHitBox;
+
+	APlayerCharacter* Player;
 
 private:
 

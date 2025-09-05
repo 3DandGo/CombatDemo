@@ -8,6 +8,7 @@
 #include "Characters/PlayerCharacter.h"
 #include "Debug/Debuggers.h"
 #include "Enums/PlayerStates.h"
+#include "Items/Weapons/WeaponBase.h"
 
 
 AMainPlayerController::AMainPlayerController()
