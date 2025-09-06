@@ -89,6 +89,10 @@ void AMainPlayerController::Interaction()
 
 	if (MainPlayerRef)
 	{
-		MainPlayerRef->OverlappingWeapon->
+		if (MainPlayerRef->OverlappingWeapon)
+		{
+			AWeaponBase* Weapon = MainPlayerRef->OverlappingWeapon;
+			Weapon->Interact();
+		}
 	}
 }

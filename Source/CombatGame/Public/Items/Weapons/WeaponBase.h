@@ -11,6 +11,7 @@ class USphereComponent;
 class UStaticMeshComponent;
 class UBoxComponent;
 class APlayerCharacter;
+class USceneComponent;
 
 UCLASS()
 class COMBATGAME_API AWeaponBase : public AActor, public IInteractionInterface
@@ -21,7 +22,10 @@ public:
 	AWeaponBase();
 	virtual void Tick(float DeltaTime) override;
 
+	void Hovering(float DeltaTime);
+
 	void WeaponSpin(float DeltaTime);
+	void AttachToPlayer(USceneComponent* InParent, FName InSocketName);
 
 	virtual void Interact() override;
 

@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "Characters/PlayerCharacter.h"
 #include "Debug/Debuggers.h"
+#include "Components/SceneComponent.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -41,6 +42,11 @@ void AWeaponBase::Tick(float DeltaTime)
 
 	WeaponSpin(DeltaTime);
 
+	Hovering(DeltaTime);
+}
+
+void AWeaponBase::Hovering(float DeltaTime)
+{
 	RunningTime += DeltaTime;
 	FVector NewLocation = GetActorLocation();
 	NewLocation.Z += FMath::Sin(RunningTime * FloatSpeed) * FloatAmplitude * DeltaTime;
@@ -52,9 +58,19 @@ void AWeaponBase::WeaponSpin(float DeltaTime)
 	AddActorLocalRotation(FRotator(SpinSpeed * DeltaTime, 0.f, 0.f));
 }
 
+
+
 // Interaction Interface Function
 void AWeaponBase::Interact()
 {
+	if (Player)
+	{
+		AttachToPlayer(Player->GetMesh(), FName("RightHandSocket"));
+
+		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped to the RightHandSocket"));
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 
 }
 
@@ -84,8 +100,8 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	}
 }
 
-void AttachWeaponToSocket(USceneComponent* InParent, const FName& InSocketName)
+void AWeaponBase::AttachToPlayer(USceneComponent* InParent, FName InSocketName)
 {
 	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
-	
+	AttachToComponent(InParent, TransformRules, InSocketName);
 }
