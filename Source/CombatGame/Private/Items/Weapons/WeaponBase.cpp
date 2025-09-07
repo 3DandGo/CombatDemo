@@ -8,6 +8,7 @@
 #include "Characters/PlayerCharacter.h"
 #include "Debug/Debuggers.h"
 #include "Components/SceneComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AWeaponBase::AWeaponBase()
 {
@@ -31,6 +32,10 @@ void AWeaponBase::BeginPlay()
 	
 	OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnStartOverlap);
 	OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AWeaponBase::OnEndOverlap);
+
+	InitialRotation = GetActorRotation();
+
+	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 
@@ -40,9 +45,11 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	WeaponSpin(DeltaTime);
-
-	Hovering(DeltaTime);
+	if (Player && Player->GetEquippedWeapon() != this)
+	{
+		WeaponSpin(DeltaTime);
+		Hovering(DeltaTime);
+	}
 }
 
 void AWeaponBase::Hovering(float DeltaTime)
@@ -70,6 +77,9 @@ void AWeaponBase::Interact()
 		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped to the RightHandSocket"));
 		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Player->SetActionState(EActionState::EAS_EquippedStance);
+		Player->SetEquippedWeapon(this);
+
 	}
 
 }
@@ -81,7 +91,6 @@ void AWeaponBase::OnStartOverlap(UPrimitiveComponent* OverlappedComponent,
 	bool bFromSweep, 
 	const FHitResult& SweepResult)
 {
-	Player = Cast<APlayerCharacter>(OtherActor);
 	if (OtherActor == Player)
 	{
 		Player->SetOverlappingWeapon(this);
@@ -93,7 +102,6 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	UPrimitiveComponent* OtherComp, 
 	int32 OtherBodyIndex)
 {
-	Player = Cast<APlayerCharacter>(OtherActor);
 	if (OtherActor == Player)
 	{
 		Player->SetOverlappingWeapon(nullptr);
@@ -104,4 +112,20 @@ void AWeaponBase::AttachToPlayer(USceneComponent* InParent, FName InSocketName)
 {
 	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
 	AttachToComponent(InParent, TransformRules, InSocketName);
+}
+
+void AWeaponBase::DetachFromPlayer()
+{
+	if (Player->GetEquippedWeapon() == this)
+	{
+		FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepWorld, false);
+		DetachFromActor(DetachmentRules);
+		FVector NewLocation = Player->WeaponDropArea->GetComponentLocation();
+		SetActorLocation(NewLocation);
+		SetActorRotation(InitialRotation);
+		Player->SetEquippedWeapon(nullptr);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		Player->SetActionState(EActionState::EAS_NoWeaponEquipped);
+	}
 }

@@ -10,6 +10,7 @@
 #include "Enums/PlayerStates.h"
 #include "Items/Weapons/WeaponBase.h"
 #include "Interfaces/InteractionInterface.h"
+#include "Components/SceneComponent.h"
 
 
 AMainPlayerController::AMainPlayerController()
@@ -24,6 +25,7 @@ void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Get player ref from the controller
 	MainPlayerRef = Cast<APlayerCharacter>(GetCharacter());
 
 	// Checks if the Player's initial context is set and not a nullptr
@@ -45,6 +47,7 @@ void AMainPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(PlayerMovementAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
 	EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Started, this, &AMainPlayerController::ToggleSprint);
 	EnhancedInputComponent->BindAction(PlayerInteractAction, ETriggerEvent::Started, this, &AMainPlayerController::Interaction);
+	EnhancedInputComponent->BindAction(PlayerDropWeaponAction, ETriggerEvent::Started, this, &AMainPlayerController::DropWeapon);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -71,11 +74,11 @@ void AMainPlayerController::ToggleSprint()
 	
 	if (CurrentSpeed >= 300.f)
 	{
-		if (MainPlayerRef->MovementState == ECharacterState::ECS_Moving)
+		if (MainPlayerRef->CharacterStates == ECharacterState::ECS_Moving)
 		{
 			MainPlayerRef->StartSprinting();
 		}
-		else if (MainPlayerRef->MovementState == ECharacterState::ECS_Sprinting)
+		else if (MainPlayerRef->CharacterStates == ECharacterState::ECS_Sprinting)
 		{
 			MainPlayerRef->StopSprinting();
 		}
@@ -94,5 +97,18 @@ void AMainPlayerController::Interaction()
 			AWeaponBase* Weapon = MainPlayerRef->OverlappingWeapon;
 			Weapon->Interact();
 		}
+	}
+}
+
+void AMainPlayerController::DropWeapon()
+{
+	if (MainPlayerRef && MainPlayerRef->GetEquippedWeapon())
+	{
+		DEBUG_MESSAGE(FColor::Black, TEXT("Drop current equipped weapon"));
+		MainPlayerRef->GetEquippedWeapon()->DetachFromPlayer();
+	}
+	else
+	{
+		DEBUG_MESSAGE(FColor::Red, TEXT("No weapon equipped"));
 	}
 }

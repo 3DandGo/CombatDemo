@@ -13,6 +13,7 @@ class UCameraComponent;
 class AMainPlayerController;
 class UCharacterMovementComponent;
 class AWeaponBase;
+class USceneComponent;
 
 UCLASS()
 class COMBATGAME_API APlayerCharacter : public ACharacter
@@ -29,11 +30,11 @@ public:
 	UPROPERTY()
 	AMainPlayerController* MainController;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums", meta = (AllowPrivateAccess = "true"))
-	ECharacterState PlayerStates = ECharacterState::ECS_Still;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
+	ECharacterState CharacterStates;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	ECharacterState MovementState;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
+	EActionState ActionStates;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float WalkSpeed = 600.f;
@@ -46,6 +47,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	AWeaponBase* EquippedWeapon;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<USceneComponent> WeaponDropArea;
 
 	void StartSprinting();
 	void StopSprinting();
@@ -74,5 +78,9 @@ private:
 	}
 
 public:
-	FORCEINLINE void SetOverlappingWeapon(AWeaponBase* Weapon) { OverlappingWeapon = Weapon; }
+	FORCEINLINE void SetOverlappingWeapon(AWeaponBase* Weapon) { OverlappingWeapon = Weapon; } // Set the current overlapping weapon
+	FORCEINLINE AWeaponBase* GetEquippedWeapon() const { return EquippedWeapon; } // Get the current equipped weapon (if any)
+	FORCEINLINE void SetEquippedWeapon(AWeaponBase* Weapon) { EquippedWeapon = Weapon; } // Set the current weapon to equipped weapon
+	FORCEINLINE EActionState GetActionState() const { return ActionStates; } // Get the current action state
+	FORCEINLINE void SetActionState(EActionState NewActionState) { ActionStates = NewActionState; } // Set to new action state
 };

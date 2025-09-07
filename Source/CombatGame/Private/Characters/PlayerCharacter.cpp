@@ -6,6 +6,7 @@
 #include "Gameframework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Controllers/MainPlayerController.h"
+#include "Components/SceneComponent.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -28,6 +29,12 @@ APlayerCharacter::APlayerCharacter()
 	
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	PlayerCamera->SetupAttachment(PlayerSpringArm);
+
+	WeaponDropArea = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Drop Location"));
+	WeaponDropArea->SetupAttachment(RootComponent);
+
+	CharacterStates = ECharacterState::ECS_Still;
+	ActionStates = EActionState::EAS_NoWeaponEquipped;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -53,15 +60,15 @@ void APlayerCharacter::SetPlayerMovementState()
 	// If current velocity is less than 300 set the player state to Idle
 	if (CurrentSpeed < 300.f)
 	{
-		MovementState = ECharacterState::ECS_Still;
+		CharacterStates = ECharacterState::ECS_Still;
 
 	}
 	// Of if the current state is not set to sprinting, set it to moving and change the walk speed back to normal
 	else
 	{
-		if (MovementState != ECharacterState::ECS_Sprinting)
+		if (CharacterStates != ECharacterState::ECS_Sprinting)
 		{
-			MovementState = ECharacterState::ECS_Moving;
+			CharacterStates = ECharacterState::ECS_Moving;
 			SetMaxWalkSpeed(600.f);
 		}
 	}
@@ -77,11 +84,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::StartSprinting()
 {
 	SetMaxWalkSpeed(900.f);
-	MovementState = ECharacterState::ECS_Sprinting;
+	CharacterStates = ECharacterState::ECS_Sprinting;
 }
 
 void APlayerCharacter::StopSprinting()
 {
 	SetMaxWalkSpeed(600.f);
-	MovementState = ECharacterState::ECS_Moving;
+	CharacterStates = ECharacterState::ECS_Moving;
 }

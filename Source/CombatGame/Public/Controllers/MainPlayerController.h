@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 class APlayerCharacter;
+class USceneComponent;
 struct FInputActionValue;
 
 /**
@@ -47,7 +48,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> PlayerInteractAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> PlayerDropWeaponAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void ToggleSprint();
 	void Interaction();
+	void DropWeapon();
 };

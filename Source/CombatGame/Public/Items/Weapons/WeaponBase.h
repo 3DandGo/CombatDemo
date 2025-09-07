@@ -26,6 +26,7 @@ public:
 
 	void WeaponSpin(float DeltaTime);
 	void AttachToPlayer(USceneComponent* InParent, FName InSocketName);
+	void DetachFromPlayer();
 
 	virtual void Interact() override;
 
@@ -47,6 +48,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* WeaponHitBox;
+
+	FRotator InitialRotation;
+
+
 
 	APlayerCharacter* Player;
 
