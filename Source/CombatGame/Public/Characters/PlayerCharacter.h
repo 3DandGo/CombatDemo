@@ -33,7 +33,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
 	ECharacterState CharacterStates;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
 	EActionState ActionStates;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")

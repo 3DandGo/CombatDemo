@@ -70,16 +70,19 @@ void AWeaponBase::WeaponSpin(float DeltaTime)
 // Interaction Interface Function
 void AWeaponBase::Interact()
 {
-	if (Player)
+	if (Player && Player->GetEquippedWeapon() == nullptr)
 	{
 		AttachToPlayer(Player->GetMesh(), FName("RightHandSocket"));
 
-		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped to the RightHandSocket"));
+		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped"));
 		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		Player->SetActionState(EActionState::EAS_EquippedStance);
 		Player->SetEquippedWeapon(this);
-
+	}
+	else
+	{
+		DEBUG_MESSAGE(FColor::Red, TEXT("Weapon already equipped"));
 	}
 
 }

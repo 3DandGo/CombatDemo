@@ -88,8 +88,6 @@ void AMainPlayerController::ToggleSprint()
 
 void AMainPlayerController::Interaction()
 {
-	DEBUG_MESSAGE(FColor::Green, TEXT("Interaction Button Pressed"));
-
 	if (MainPlayerRef)
 	{
 		if (MainPlayerRef->OverlappingWeapon)

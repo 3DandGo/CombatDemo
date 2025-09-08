@@ -33,6 +33,7 @@ APlayerCharacter::APlayerCharacter()
 	WeaponDropArea = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Drop Location"));
 	WeaponDropArea->SetupAttachment(RootComponent);
 
+	/* Setting default values for variables */
 	CharacterStates = ECharacterState::ECS_Still;
 	ActionStates = EActionState::EAS_NoWeaponEquipped;
 }
