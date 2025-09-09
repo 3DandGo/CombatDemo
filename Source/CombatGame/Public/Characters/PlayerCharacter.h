@@ -14,6 +14,7 @@ class AMainPlayerController;
 class UCharacterMovementComponent;
 class AWeaponBase;
 class USceneComponent;
+class UAnimMontage;
 
 UCLASS()
 class COMBATGAME_API APlayerCharacter : public ACharacter
@@ -54,8 +55,15 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USceneComponent> WeaponDropArea;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* AttackMontage;
+
 	void StartSprinting();
 	void StopSprinting();
+	void PlayAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackEnded();
 
 protected:
 	

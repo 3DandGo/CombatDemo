@@ -53,6 +53,7 @@ void AMainPlayerController::SetupInputComponent()
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	if (MainPlayerRef->CombatStates == ECombatState::CAS_Attacking) return;
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -69,6 +70,7 @@ void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AMainPlayerController::ToggleSprint()
 {
+	if (MainPlayerRef->CombatStates == ECombatState::CAS_Attacking) return;
 	if (!MainPlayerRef) return;
 
 	float CurrentSpeed = MainPlayerRef->GetVelocity().Size2D();
@@ -118,5 +120,15 @@ void AMainPlayerController::BasicAttack()
 		MainPlayerRef->GetCombatState() == ECombatState::CAS_NotAttacking)
 	{ 
 	DEBUG_MESSAGE(FColor::Orange, TEXT("Basic Attack"));
+	MainPlayerRef->PlayAttackMontage();
+	}
+	else if (MainPlayerRef->GetActionState() == EActionState::EAS_EquippedStance &&
+		MainPlayerRef->GetCombatState() == ECombatState::CAS_Attacking)
+	{
+		DEBUG_MESSAGE(FColor::White, TEXT("Currently Attacking"));
+	}
+	else
+	{
+		DEBUG_MESSAGE(FColor::White, TEXT("No Weapon Equipped To Attack"));
 	}
 }

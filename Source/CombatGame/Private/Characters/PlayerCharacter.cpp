@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Controllers/MainPlayerController.h"
 #include "Components/SceneComponent.h"
+#include "Animation/AnimMontage.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -93,4 +94,19 @@ void APlayerCharacter::StopSprinting()
 {
 	SetMaxWalkSpeed(600.f);
 	CharacterStates = ECharacterState::ECS_Moving;
+}
+
+void APlayerCharacter::PlayAttackMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && AttackMontage)
+	{
+		AnimInstance->Montage_Play(AttackMontage);
+		CombatStates = ECombatState::CAS_Attacking;
+	}
+}
+
+void APlayerCharacter::AttackEnded()
+{
+	CombatStates = ECombatState::CAS_NotAttacking;
 }
