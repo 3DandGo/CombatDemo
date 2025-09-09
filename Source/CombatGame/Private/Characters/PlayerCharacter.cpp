@@ -36,6 +36,7 @@ APlayerCharacter::APlayerCharacter()
 	/* Setting default values for variables */
 	CharacterStates = ECharacterState::ECS_Still;
 	ActionStates = EActionState::EAS_NoWeaponEquipped;
+	CombatStates = ECombatState::CAS_NotAttacking;
 }
 
 void APlayerCharacter::BeginPlay()

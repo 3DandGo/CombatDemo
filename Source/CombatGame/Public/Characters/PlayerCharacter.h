@@ -36,6 +36,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
 	EActionState ActionStates;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
+	ECombatState CombatStates;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float WalkSpeed = 600.f;
 
@@ -83,4 +86,6 @@ public:
 	FORCEINLINE void SetEquippedWeapon(AWeaponBase* Weapon) { EquippedWeapon = Weapon; } // Set the current weapon to equipped weapon
 	FORCEINLINE EActionState GetActionState() const { return ActionStates; } // Get the current action state
 	FORCEINLINE void SetActionState(EActionState NewActionState) { ActionStates = NewActionState; } // Set to new action state
+	FORCEINLINE ECombatState GetCombatState() const { return CombatStates; } // Get the current combat state
+	FORCEINLINE void SetCombatState(ECombatState NewCombatState) { CombatStates = NewCombatState; } // Set to new combat state
 };

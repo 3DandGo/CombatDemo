@@ -15,3 +15,10 @@ enum class EActionState : uint8
 	EAS_UnEquippedStance UMETA(DisplayName = "UnEquipped"), // When player has a weapon but it's unequipped
 	EAS_EquippedStance UMETA(DisplayName = "Equipped"), // When a weapon is equipped by the player
 };
+
+UENUM(BlueprintType)
+enum class ECombatState : uint8
+{
+	CAS_NotAttacking UMETA(DisplayName = "Not Attacking"),
+	CAS_Attacking UMETA(DisplayName = "Attacking")
+};

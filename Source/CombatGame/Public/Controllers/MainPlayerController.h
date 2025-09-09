@@ -51,8 +51,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> PlayerDropWeaponAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> PlayerBasicAttackAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void ToggleSprint();
 	void Interaction();
 	void DropWeapon();
+	void BasicAttack();
 };

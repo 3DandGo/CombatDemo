@@ -48,6 +48,7 @@ void AMainPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Started, this, &AMainPlayerController::ToggleSprint);
 	EnhancedInputComponent->BindAction(PlayerInteractAction, ETriggerEvent::Started, this, &AMainPlayerController::Interaction);
 	EnhancedInputComponent->BindAction(PlayerDropWeaponAction, ETriggerEvent::Started, this, &AMainPlayerController::DropWeapon);
+	EnhancedInputComponent->BindAction(PlayerBasicAttackAction, ETriggerEvent::Started, this, &AMainPlayerController::BasicAttack);
 }
 
 void AMainPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -108,5 +109,14 @@ void AMainPlayerController::DropWeapon()
 	else
 	{
 		DEBUG_MESSAGE(FColor::Red, TEXT("No weapon equipped"));
+	}
+}
+
+void AMainPlayerController::BasicAttack()
+{
+	if (MainPlayerRef->GetActionState() == EActionState::EAS_EquippedStance && 
+		MainPlayerRef->GetCombatState() == ECombatState::CAS_NotAttacking)
+	{ 
+	DEBUG_MESSAGE(FColor::Orange, TEXT("Basic Attack"));
 	}
 }
