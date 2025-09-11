@@ -22,3 +22,13 @@ enum class ECombatState : uint8
 	CAS_NotAttacking UMETA(DisplayName = "Not Attacking"),
 	CAS_Attacking UMETA(DisplayName = "Attacking")
 };
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	EWT_NoWeapon UMETA(DisplayName = "No Weapon"),
+	EWT_OneHanded UMETA(DisplayName = "One-Handed Weapon"),
+	EWT_TwoHanded UMETA(DisplayName = "Two-Handed Weapon"),
+	EWT_Pistol UMETA (DisplayName = "Pistol"),
+	EWT_Rifle UMETA (DisplayName = "Rifle")
+};

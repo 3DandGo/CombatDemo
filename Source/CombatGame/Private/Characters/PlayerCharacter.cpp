@@ -38,6 +38,7 @@ APlayerCharacter::APlayerCharacter()
 	CharacterStates = ECharacterState::ECS_Still;
 	ActionStates = EActionState::EAS_NoWeaponEquipped;
 	CombatStates = ECombatState::CAS_NotAttacking;
+	WeaponType = EWeaponType::EWT_NoWeapon;
 }
 
 void APlayerCharacter::BeginPlay()

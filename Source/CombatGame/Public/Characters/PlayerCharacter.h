@@ -40,6 +40,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
 	ECombatState CombatStates;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
+	EWeaponType WeaponType;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float WalkSpeed = 600.f;
 
