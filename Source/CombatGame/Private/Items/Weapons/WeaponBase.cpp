@@ -113,8 +113,33 @@ void AWeaponBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void AWeaponBase::AttachToPlayer(USceneComponent* InParent, FName InSocketName)
 {
-	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
+	FAttachmentTransformRules TransformRules(
+		EAttachmentRule::SnapToTarget, // Location
+		EAttachmentRule::SnapToTarget, // Rotation
+		EAttachmentRule::KeepWorld, // Scale
+		true
+	);
+
 	AttachToComponent(InParent, TransformRules, InSocketName);
+	SetActorScale3D(WeaponScale);
+
+	
+	switch (WeaponType)
+	{
+		
+		case EWeaponType::EWT_OneHanded:
+			Player->SetWeaponType(EWeaponType::EWT_OneHanded);
+			break;
+
+		case EWeaponType::EWT_TwoHanded:
+			Player->SetWeaponType(EWeaponType::EWT_TwoHanded);
+			break;
+
+		default:
+			Player->SetWeaponType(EWeaponType::EWT_NoWeapon);
+			break;
+	}
+	
 }
 
 void AWeaponBase::DetachFromPlayer()
@@ -130,5 +155,6 @@ void AWeaponBase::DetachFromPlayer()
 		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Player->SetActionState(EActionState::EAS_NoWeaponEquipped);
+		Player->SetWeaponType(EWeaponType::EWT_NoWeapon);
 	}
 }

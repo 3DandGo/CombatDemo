@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/InteractionInterface.h"
+#include "Enums/PlayerStates.h"
 #include "WeaponBase.generated.h"
 
 class USphereComponent;
@@ -33,6 +34,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* WeaponMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enums")
+	EWeaponType WeaponType = EWeaponType::EWT_NoWeapon;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -45,15 +49,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* OverlapSphere;
 
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* WeaponHitBox;
 
 	FRotator InitialRotation;
 
-
-
 	APlayerCharacter* Player;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon Attributes")
+	FVector WeaponScale = FVector(1.0f);
 
 private:
 
@@ -67,4 +71,8 @@ private:
 	float FloatSpeed = 2.0f;
 
 	float RunningTime = 0.0f;
+
+public:
+	FORCEINLINE void SetWeaponType(EWeaponType NewWeaponType) { WeaponType = NewWeaponType; }
+	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 };

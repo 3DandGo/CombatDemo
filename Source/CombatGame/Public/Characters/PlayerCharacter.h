@@ -59,11 +59,15 @@ public:
 	TObjectPtr<USceneComponent> WeaponDropArea;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Montages")
-	UAnimMontage* AttackMontage;
+	UAnimMontage* LightAttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Montages")
+	UAnimMontage* HeavyAttackMontage;
 
 	void StartSprinting();
 	void StopSprinting();
-	void PlayAttackMontage();
+	void PlayLightAttackMontage();
+	void PlayHeavyAttackMontage();
 
 	UFUNCTION(BlueprintCallable)
 	void AttackEnded();
@@ -99,4 +103,6 @@ public:
 	FORCEINLINE void SetActionState(EActionState NewActionState) { ActionStates = NewActionState; } // Set to new action state
 	FORCEINLINE ECombatState GetCombatState() const { return CombatStates; } // Get the current combat state
 	FORCEINLINE void SetCombatState(ECombatState NewCombatState) { CombatStates = NewCombatState; } // Set to new combat state
+	FORCEINLINE void SetWeaponType(EWeaponType NewWeaponType) { WeaponType = NewWeaponType; }
+	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
 };

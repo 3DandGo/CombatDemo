@@ -97,12 +97,22 @@ void APlayerCharacter::StopSprinting()
 	CharacterStates = ECharacterState::ECS_Moving;
 }
 
-void APlayerCharacter::PlayAttackMontage()
+void APlayerCharacter::PlayLightAttackMontage()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && AttackMontage)
+	if (AnimInstance && LightAttackMontage)
 	{
-		AnimInstance->Montage_Play(AttackMontage);
+		AnimInstance->Montage_Play(LightAttackMontage);
+		CombatStates = ECombatState::CAS_Attacking;
+	}
+}
+
+void APlayerCharacter::PlayHeavyAttackMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && HeavyAttackMontage)
+	{
+		AnimInstance->Montage_Play(HeavyAttackMontage);
 		CombatStates = ECombatState::CAS_Attacking;
 	}
 }

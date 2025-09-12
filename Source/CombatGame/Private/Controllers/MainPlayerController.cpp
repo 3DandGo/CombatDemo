@@ -103,14 +103,14 @@ void AMainPlayerController::Interaction()
 
 void AMainPlayerController::DropWeapon()
 {
-	if (MainPlayerRef && MainPlayerRef->GetEquippedWeapon())
+	if (MainPlayerRef && MainPlayerRef->GetEquippedWeapon() && MainPlayerRef->GetCombatState() != ECombatState::CAS_Attacking)
 	{
 		DEBUG_MESSAGE(FColor::Black, TEXT("Drop current equipped weapon"));
 		MainPlayerRef->GetEquippedWeapon()->DetachFromPlayer();
 	}
 	else
 	{
-		DEBUG_MESSAGE(FColor::Red, TEXT("No weapon equipped"));
+		DEBUG_MESSAGE(FColor::Red, TEXT("No weapon equipped or currently attacking"));
 	}
 }
 
@@ -118,9 +118,19 @@ void AMainPlayerController::BasicAttack()
 {
 	if (MainPlayerRef->GetActionState() == EActionState::EAS_EquippedStance && 
 		MainPlayerRef->GetCombatState() == ECombatState::CAS_NotAttacking)
-	{ 
-	DEBUG_MESSAGE(FColor::Orange, TEXT("Basic Attack"));
-	MainPlayerRef->PlayAttackMontage();
+	{
+		switch(MainPlayerRef->WeaponType)
+		{ 
+		case EWeaponType::EWT_OneHanded:
+			MainPlayerRef->PlayLightAttackMontage();
+			break;
+
+		case EWeaponType::EWT_TwoHanded:
+			MainPlayerRef->PlayHeavyAttackMontage();
+			break;
+
+		default: DEBUG_MESSAGE(FColor::White, TEXT("No Animation Set"));
+		}
 	}
 	else if (MainPlayerRef->GetActionState() == EActionState::EAS_EquippedStance &&
 		MainPlayerRef->GetCombatState() == ECombatState::CAS_Attacking)
