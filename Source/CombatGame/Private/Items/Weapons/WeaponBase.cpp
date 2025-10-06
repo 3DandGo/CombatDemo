@@ -25,7 +25,9 @@ AWeaponBase::AWeaponBase()
 
 	WeaponHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	WeaponHitBox->SetupAttachment(GetRootComponent());
-	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	WeaponHitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	WeaponHitBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	WeaponHitBox->SetGenerateOverlapEvents(true);
 
 	StartPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Start Point"));
@@ -47,7 +49,7 @@ void AWeaponBase::BeginPlay()
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-	WeaponHitBox->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::AttackCheckStart);
+	WeaponHitBox->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::OnAttackOverlap);
 }
 
 
@@ -171,39 +173,27 @@ void AWeaponBase::DetachFromPlayer()
 	}
 }
 
-void AWeaponBase::AttackCheckStart(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AWeaponBase::OnAttackOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Purple, TEXT("Weapon Trace Start"));
-	}
+	const FVector Start = StartPoint->GetComponentLocation();
+	const FVector End = EndPoint->GetComponentLocation();
 
-	FVector TraceStart = StartPoint->GetComponentLocation();
-	FVector TraceEnd = EndPoint->GetComponentLocation();
-	FHitResult Hit;
+	FHitResult BoxHit;
 
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 
-	UKismetSystemLibrary::BoxTraceSingle(
-		this,
-		TraceStart,
-		TraceEnd,
+	UKismetSystemLibrary::BoxTraceSingle(this,
+		Start, End,
 		FVector(10.f, 10.f, 10.f),
-		WeaponHitBox->GetComponentRotation(),
+		StartPoint->GetComponentRotation(),
 		ETraceTypeQuery::TraceTypeQuery1,
 		false,
 		ActorsToIgnore,
-		EDrawDebugTrace::Persistent,
-		Hit,
-		true
-	);
+		EDrawDebugTrace::ForDuration,
+		BoxHit,
+		true);
 
-}
-
-void AWeaponBase::AttackCheckStop(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Orange, TEXT("Weapon Trace Stop"));
 }
 
 
