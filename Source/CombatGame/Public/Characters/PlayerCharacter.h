@@ -52,7 +52,7 @@ public:
 	UPROPERTY(VisibleInstanceOnly)
 	AWeaponBase* OverlappingWeapon;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AWeaponBase* EquippedWeapon;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
