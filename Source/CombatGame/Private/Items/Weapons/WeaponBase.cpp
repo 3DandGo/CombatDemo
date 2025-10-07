@@ -25,7 +25,7 @@ AWeaponBase::AWeaponBase()
 
 	WeaponHitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	WeaponHitBox->SetupAttachment(GetRootComponent());
-	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	WeaponHitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	WeaponHitBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	WeaponHitBox->SetGenerateOverlapEvents(true);
@@ -81,8 +81,6 @@ void AWeaponBase::WeaponSpin(float DeltaTime)
 	AddActorLocalRotation(FRotator(SpinSpeed * DeltaTime, 0.f, 0.f));
 }
 
-
-
 // Interaction Interface Function
 void AWeaponBase::Interact()
 {
@@ -136,6 +134,11 @@ void AWeaponBase::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	ActorsToIgnore.Add(this);
 	FHitResult HitBox;
 
+	for (AActor* Actor : IgnoreHitActors)
+	{
+		ActorsToIgnore.AddUnique(Actor);
+	}
+
 	UKismetSystemLibrary::BoxTraceSingle(
 		this,
 		Start,
@@ -149,7 +152,7 @@ void AWeaponBase::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		HitBox,
 		true);
 
-	UE_LOG(LogTemp, Warning, TEXT("Trace Fired"));
+	IgnoreHitActors.AddUnique(HitBox.GetActor());
 }
 
 void AWeaponBase::AttachToPlayer(USceneComponent* InParent, FName InSocketName)
@@ -201,4 +204,20 @@ void AWeaponBase::DetachFromPlayer()
 
 }
 
+void AWeaponBase::AttackColOn()
+{
+	if (WeaponHitBox)
+	{ 
+	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+}
 
+
+void AWeaponBase::AttackColOff()
+{
+	if (WeaponHitBox)
+	{
+		WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		IgnoreHitActors.Empty();
+	}
+}

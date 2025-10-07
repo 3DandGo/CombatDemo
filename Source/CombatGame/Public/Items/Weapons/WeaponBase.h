@@ -29,6 +29,12 @@ public:
 	void AttachToPlayer(USceneComponent* InParent, FName InSocketName);
 	void DetachFromPlayer();
 
+	UFUNCTION(BlueprintCallable)
+	void AttackColOff();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackColOn();
+
 	virtual void Interact() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -42,6 +48,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* EndPoint;
+
+	TArray<AActor*> IgnoreHitActors;
 
 protected:
 	virtual void BeginPlay() override;
