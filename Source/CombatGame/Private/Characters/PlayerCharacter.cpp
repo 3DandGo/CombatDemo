@@ -2,14 +2,14 @@
 
 
 #include "Characters/PlayerCharacter.h"
-
-#include "SNegativeActionButton.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Gameframework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Controllers/MainPlayerController.h"
 #include "Components/SceneComponent.h"
 #include "Animation/AnimMontage.h"
+#include "DrawDebugHelpers.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -94,6 +94,34 @@ void APlayerCharacter::Interact_Implementation()
 	UE_LOG(LogTemp, Warning, TEXT("[PLAYER] Player interacted Called"));
 	
 	// FORWARD TRACE WITH SPHERE TO CHECK 
+	FVector StartLocation = GetActorLocation();
+	FVector ForwardLocation = GetActorForwardVector();
+	FVector EndLocation = StartLocation + (ForwardLocation * TraceDistance);
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	QueryParams.bIgnoreTouches = true;
+	
+	TArray<FHitResult> HitResults;
+	
+	bool bIsHit = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		StartLocation,
+		EndLocation,
+		FQuat::Identity,
+		ECC_WorldDynamic,
+		FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight)
+		);
+	
+	FColor HitColor = bIsHit ? FColor::Magenta : FColor::White;
+	
+	FVector Center = (StartLocation + EndLocation) * 0.5f;
+	float HalfHeight = FVector::Distance(StartLocation, EndLocation) * 0.5f;
+	float Radius = CapsuleRadius;
+	FVector Direction = (EndLocation - StartLocation).GetSafeNormal();
+	FQuat CapsuleRotation = FRotationMatrix::MakeFromZ(Direction).ToQuat();
+	
+	DrawDebugCapsule(GetWorld(), Center, HalfHeight, Radius, CapsuleRotation, HitColor, true, 3.f);
+	
 }
 
 void APlayerCharacter::StartSprinting()

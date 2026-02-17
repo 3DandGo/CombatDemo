@@ -78,6 +78,13 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float TraceDistance = 5.0f;
+	UPROPERTY(EditDefaultsOnly)
+	float CapsuleRadius = 5.0f;
+	UPROPERTY(EditDefaultsOnly)
+	float CapsuleHalfHeight = 5.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USpringArmComponent> PlayerSpringArm;
