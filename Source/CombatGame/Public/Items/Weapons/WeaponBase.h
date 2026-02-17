@@ -35,7 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttackColOn();
 
-	virtual void Interact() override;
+	virtual void Interact_Implementation() override;;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* WeaponMesh;

@@ -56,7 +56,7 @@ private:
 
 	void Move(const FInputActionValue& InputActionValue);
 	void ToggleSprint();
-	void Interaction();
+	void PlayerInteraction();
 	void DropWeapon();
 	void BasicAttack();
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Enums/PlayerStates.h"
+#include "interfaces/InteractionInterface.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -17,7 +18,7 @@ class USceneComponent;
 class UAnimMontage;
 
 UCLASS()
-class COMBATGAME_API APlayerCharacter : public ACharacter
+class COMBATGAME_API APlayerCharacter : public ACharacter, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -28,33 +29,35 @@ public:
 	void SetPlayerMovementState();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//// INTERFACE FUNCTIONS ////////
+	virtual void Interact_Implementation() override;
+	
+	///// REFERENCES /////
 	UPROPERTY()
 	AMainPlayerController* MainController;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
-	ECharacterState CharacterStates;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
-	EActionState ActionStates;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
-	ECombatState CombatStates;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
-	EWeaponType WeaponType;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	float WalkSpeed = 600.f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	float SprintSpeed = 900.f;
-
 	UPROPERTY(VisibleInstanceOnly)
 	AWeaponBase* OverlappingWeapon;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AWeaponBase* EquippedWeapon;
 
+
+	//// ENUM STATES //////
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enum")
+	ECharacterState CharacterStates;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
+	EActionState ActionStates;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
+	ECombatState CombatStates;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enum")
+	EWeaponType WeaponType;
+
+	//// MOVEMENT VARIABLES ////
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	float WalkSpeed = 600.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	float SprintSpeed = 900.f;
+
+	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USceneComponent> WeaponDropArea;
 

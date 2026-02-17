@@ -81,26 +81,6 @@ void AWeaponBase::WeaponSpin(float DeltaTime)
 	AddActorLocalRotation(FRotator(SpinSpeed * DeltaTime, 0.f, 0.f));
 }
 
-// Interaction Interface Function
-void AWeaponBase::Interact()
-{
-	if (Player && Player->GetEquippedWeapon() == nullptr)
-	{
-		AttachToPlayer(Player->GetMesh(), FName("RightHandSocket"));
-
-		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped"));
-		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		Player->SetActionState(EActionState::EAS_EquippedStance);
-		Player->SetEquippedWeapon(this);
-	}
-	else
-	{
-		DEBUG_MESSAGE(FColor::Red, TEXT("Weapon already equipped"));
-	}
-
-}
-
 void AWeaponBase::OnStartOverlap(UPrimitiveComponent* OverlappedComponent, 
 	AActor* OtherActor, 
 	UPrimitiveComponent* OtherComp, 
@@ -210,6 +190,27 @@ void AWeaponBase::AttackColOn()
 	{ 
 	WeaponHitBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
+}
+
+void AWeaponBase::Interact_Implementation()
+{
+	IInteractionInterface::Interact_Implementation();
+	
+	if (Player && Player->GetEquippedWeapon() == nullptr)
+	{
+		AttachToPlayer(Player->GetMesh(), FName("RightHandSocket"));
+
+		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped"));
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Player->SetActionState(EActionState::EAS_EquippedStance);
+		Player->SetEquippedWeapon(this);
+	}
+	else
+	{
+		DEBUG_MESSAGE(FColor::Red, TEXT("Weapon already equipped"));
+	}
+
 }
 
 

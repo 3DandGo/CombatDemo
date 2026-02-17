@@ -2,6 +2,8 @@
 
 
 #include "Characters/PlayerCharacter.h"
+
+#include "SNegativeActionButton.h"
 #include "Camera/CameraComponent.h"
 #include "Gameframework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -83,6 +85,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void APlayerCharacter::Interact_Implementation()
+{
+	IInteractionInterface::Interact_Implementation();
+	
+	UE_LOG(LogTemp, Warning, TEXT("[PLAYER] Player interacted Called"));
+	
+	// FORWARD TRACE WITH SPHERE TO CHECK 
 }
 
 void APlayerCharacter::StartSprinting()

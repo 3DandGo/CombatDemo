@@ -46,7 +46,7 @@ void AMainPlayerController::SetupInputComponent()
 	/* Input Action Bindings */
 	EnhancedInputComponent->BindAction(PlayerMovementAction, ETriggerEvent::Triggered, this, &AMainPlayerController::Move);
 	EnhancedInputComponent->BindAction(PlayerSprintAction, ETriggerEvent::Started, this, &AMainPlayerController::ToggleSprint);
-	EnhancedInputComponent->BindAction(PlayerInteractAction, ETriggerEvent::Started, this, &AMainPlayerController::Interaction);
+	EnhancedInputComponent->BindAction(PlayerInteractAction, ETriggerEvent::Started, this, &AMainPlayerController::PlayerInteraction);
 	EnhancedInputComponent->BindAction(PlayerDropWeaponAction, ETriggerEvent::Started, this, &AMainPlayerController::DropWeapon);
 	EnhancedInputComponent->BindAction(PlayerBasicAttackAction, ETriggerEvent::Started, this, &AMainPlayerController::BasicAttack);
 }
@@ -89,14 +89,15 @@ void AMainPlayerController::ToggleSprint()
 	
 }
 
-void AMainPlayerController::Interaction()
+void AMainPlayerController::PlayerInteraction()
 {
 	if (MainPlayerRef)
 	{
-		if (MainPlayerRef->OverlappingWeapon)
+		IInteractionInterface* InteractInt = Cast<IInteractionInterface>(MainPlayerRef);
+		
+		if (InteractInt)
 		{
-			AWeaponBase* Weapon = MainPlayerRef->OverlappingWeapon;
-			Weapon->Interact();
+			InteractInt->Execute_Interact(MainPlayerRef);
 		}
 	}
 }
