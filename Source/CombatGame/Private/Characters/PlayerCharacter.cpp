@@ -132,7 +132,17 @@ void APlayerCharacter::Interact_Implementation()
 				else
 				{
 					OverlappedActors.AddUnique(Weapon);
-					UE_LOG(LogTemp, Warning, TEXT("Hit Weapon: %s"), *Weapon->GetName());
+					if (IsValid(GetEquippedWeapon()))
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Weapon already equipped - ignore"));
+					}
+					else
+					{
+						if (IInteractionInterface* InteractActor =Cast<IInteractionInterface>(Weapon))
+						{
+							InteractActor->Execute_Interact(Weapon);
+						}
+					}
 				}
 			}
 		}
