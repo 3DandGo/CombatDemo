@@ -10,6 +10,8 @@
 #include "Components/SceneComponent.h"
 #include "Animation/AnimMontage.h"
 #include "DrawDebugHelpers.h"
+#include "Debug/Debuggers.h"
+#include "Items/Weapons/WeaponBase.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -101,10 +103,10 @@ void APlayerCharacter::Interact_Implementation()
 	QueryParams.AddIgnoredActor(this);
 	QueryParams.bIgnoreTouches = true;
 	
-	TArray<FHitResult> HitResults;
+	TArray<FHitResult> Hits;
 	
 	bool bIsHit = GetWorld()->SweepMultiByChannel(
-		HitResults,
+		Hits,
 		StartLocation,
 		EndLocation,
 		FQuat::Identity,
@@ -113,6 +115,29 @@ void APlayerCharacter::Interact_Implementation()
 		);
 	
 	FColor HitColor = bIsHit ? FColor::Magenta : FColor::White;
+	
+	
+	
+	if (bIsHit)
+	{
+		for (const FHitResult& HitActor : Hits)
+		{
+			AActor* Actor = HitActor.GetActor();
+			if (AWeaponBase* Weapon = Cast<AWeaponBase>(Actor))
+			{
+				if (OverlappedActors.Contains(Weapon))
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Weapon already overlapped - ignore"));
+				}
+				else
+				{
+					OverlappedActors.AddUnique(Weapon);
+					UE_LOG(LogTemp, Warning, TEXT("Hit Weapon: %s"), *Weapon->GetName());
+				}
+			}
+		}
+		OverlappedActors.Empty();
+	}
 	
 	FVector Center = (StartLocation + EndLocation) * 0.5f;
 	float HalfHeight = FVector::Distance(StartLocation, EndLocation) * 0.5f;

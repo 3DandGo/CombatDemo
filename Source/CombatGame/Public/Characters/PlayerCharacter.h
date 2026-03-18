@@ -85,6 +85,9 @@ protected:
 	float CapsuleRadius = 5.0f;
 	UPROPERTY(EditDefaultsOnly)
 	float CapsuleHalfHeight = 5.0f;
+	
+	UPROPERTY()
+	TArray<AActor*> OverlappedActors;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USpringArmComponent> PlayerSpringArm;
