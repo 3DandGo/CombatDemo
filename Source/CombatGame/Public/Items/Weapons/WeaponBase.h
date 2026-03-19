@@ -49,6 +49,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* EndPoint;
 
+	UPROPERTY()
 	TArray<AActor*> IgnoreHitActors;
 
 protected:
@@ -65,12 +66,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* OverlapSphere;
+	
+	
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* WeaponHitBox;
 
 	FRotator InitialRotation;
 
+	UPROPERTY()
 	APlayerCharacter* Player;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon Attributes")

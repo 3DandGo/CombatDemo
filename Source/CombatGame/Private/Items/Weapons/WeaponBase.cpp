@@ -19,6 +19,8 @@ AWeaponBase::AWeaponBase()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
 	RootComponent = WeaponMesh;
 	WeaponMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	WeaponMesh->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	WeaponMesh->SetCollisionResponseToChannel(ECC_WorldDynamic, ECollisionResponse::ECR_Ignore);
 
 	OverlapSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Overlapping Sphere"));
 	OverlapSphere->SetupAttachment(GetRootComponent());
@@ -176,7 +178,6 @@ void AWeaponBase::DetachFromPlayer()
 		SetActorLocation(NewLocation);
 		SetActorRotation(InitialRotation);
 		Player->SetEquippedWeapon(nullptr);
-		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Player->SetActionState(EActionState::EAS_NoWeaponEquipped);
 		Player->SetWeaponType(EWeaponType::EWT_NoWeapon);
@@ -199,9 +200,7 @@ void AWeaponBase::Interact_Implementation()
 	if (Player && Player->GetEquippedWeapon() == nullptr)
 	{
 		AttachToPlayer(Player->GetMesh(), FName("RightHandSocket"));
-
-		DEBUG_MESSAGE(FColor::Blue, TEXT("Weapon is equipped"));
-		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		
 		OverlapSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		Player->SetActionState(EActionState::EAS_EquippedStance);
 		Player->SetEquippedWeapon(this);
