@@ -160,6 +160,14 @@ void AWeaponBase::AttachToPlayer(USceneComponent* InParent, FName InSocketName)
 		case EWeaponType::EWT_TwoHanded:
 			Player->SetWeaponType(EWeaponType::EWT_TwoHanded);
 			break;
+		
+		case EWeaponType::EWT_Pistol:
+			Player->SetWeaponType(EWeaponType::EWT_Pistol);
+			break;
+		
+		case EWeaponType::EWT_Rifle:
+			Player->SetWeaponType(EWeaponType::EWT_Rifle);
+			break;
 
 		default:
 			Player->SetWeaponType(EWeaponType::EWT_NoWeapon);
